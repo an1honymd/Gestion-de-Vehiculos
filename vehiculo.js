@@ -1,50 +1,18 @@
-/* =========================================================
-   FLEXICAR - SISTEMA DE CITAS
-   ========================================================= */
-
 'use strict';
-
-/* =========================================================
-   ELEMENTOS DEL HTML
-   ========================================================= */
 
 const formulario = document.getElementById('formularioCita');
 const btnLimpiar = document.getElementById('btnLimpiar');
 const listaCitas = document.getElementById('listaCitas');
 const contadorCitas = document.getElementById('contadorCitas');
 
-
-/* =========================================================
-   CAMPOS DEL FORMULARIO
-   ========================================================= */
-
-const nombre = document.getElementById('nombre');
-const telefono = document.getElementById('telefono');
-const correo = document.getElementById('correo');
-
-const marca = document.getElementById('marca');
-const modelo = document.getElementById('modelo');
-const anio = document.getElementById('anio');
-const placa = document.getElementById('placa');
-const tipoServicio = document.getElementById('tipoServicio');
-
-const fecha = document.getElementById('fecha');
-const hora = document.getElementById('hora');
-const agente = document.getElementById('agente');
-
-
-/* =========================================================
-   VARIABLES
-   ========================================================= */
-
 let citas = [];
-let indiceEditando = null;
+let indiceEditando = -1;
 
 const STORAGE_CITAS = 'flexicarCitas';
 
 
 /* =========================================================
-   CARGAR CITAS AL INICIAR
+   INICIAR SISTEMA
    ========================================================= */
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -57,58 +25,24 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 /* =========================================================
-   FECHA MÍNIMA
-   ========================================================= */
-
-function establecerFechaMinima() {
-
-    const hoy = new Date();
-
-    const anioHoy = hoy.getFullYear();
-    const mesHoy = String(hoy.getMonth() + 1).padStart(2, '0');
-    const diaHoy = String(hoy.getDate()).padStart(2, '0');
-
-    const fechaHoy = `${anioHoy}-${mesHoy}-${diaHoy}`;
-
-    fecha.min = fechaHoy;
-}
-
-
-/* =========================================================
-   CARGAR CITAS DESDE LOCALSTORAGE
+   CARGAR CITAS
    ========================================================= */
 
 function cargarCitas() {
 
-    const datosGuardados = localStorage.getItem(STORAGE_CITAS);
+    const datos = localStorage.getItem(STORAGE_CITAS);
 
-    if (datosGuardados) {
-
-        try {
-
-            citas = JSON.parse(datosGuardados);
-
-            if (!Array.isArray(citas)) {
-                citas = [];
-            }
-
-        } catch (error) {
-
-            console.error('Error al cargar las citas:', error);
-
-            citas = [];
-        }
-
+    if (datos) {
+        citas = JSON.parse(datos);
     } else {
-
         citas = [];
-
     }
+
 }
 
 
 /* =========================================================
-   GUARDAR CITAS EN LOCALSTORAGE
+   GUARDAR CITAS
    ========================================================= */
 
 function guardarCitas() {
@@ -117,32 +51,33 @@ function guardarCitas() {
         STORAGE_CITAS,
         JSON.stringify(citas)
     );
+
 }
 
 
 /* =========================================================
-   FORMULARIO - GUARDAR CITA
+   PROGRAMAR CITA
    ========================================================= */
 
 formulario.addEventListener('submit', function (event) {
 
     event.preventDefault();
 
-    const datosCita = {
+    const cita = {
 
-        nombre: nombre.value.trim(),
-        telefono: telefono.value.trim(),
-        correo: correo.value.trim(),
+        nombre: document.getElementById('nombre').value,
+        telefono: document.getElementById('telefono').value,
+        correo: document.getElementById('correo').value,
 
-        marca: marca.value.trim(),
-        modelo: modelo.value.trim(),
-        anio: anio.value,
-        placa: placa.value.trim().toUpperCase(),
-        tipoServicio: tipoServicio.value,
+        marca: document.getElementById('marca').value,
+        modelo: document.getElementById('modelo').value,
+        anio: document.getElementById('anio').value,
+        placa: document.getElementById('placa').value,
+        tipoServicio: document.getElementById('tipoServicio').value,
 
-        fecha: fecha.value,
-        hora: hora.value,
-        agente: agente.value,
+        fecha: document.getElementById('fecha').value,
+        hora: document.getElementById('hora').value,
+        agente: document.getElementById('agente').value,
 
         estado: 'Programada'
 
@@ -150,85 +85,42 @@ formulario.addEventListener('submit', function (event) {
 
 
     /* =====================================================
-       VALIDAR FECHA
+       GUARDAR O EDITAR
        ===================================================== */
 
-    const hoy = new Date();
-    hoy.setHours(0, 0, 0, 0);
+    if (indiceEditando === -1) {
 
-    const fechaSeleccionada = new Date(
-        datosCita.fecha + 'T00:00:00'
-    );
+        citas.push(cita);
 
-    if (fechaSeleccionada < hoy) {
+        alert('¡Cita programada correctamente!');
 
-        alert('No puedes seleccionar una fecha anterior a hoy.');
+    } else {
 
-        return;
+        citas[indiceEditando] = cita;
+
+        indiceEditando = -1;
+
+        document.getElementById('btnGuardar').innerHTML =
+            '📅 Programar cita';
+
+        alert('¡Cita actualizada correctamente!');
+
     }
 
 
     /* =====================================================
-       EVITAR CITAS DUPLICADAS
+       GUARDAR EN EL NAVEGADOR
        ===================================================== */
-
-    const citaDuplicada = citas.some(function (cita, index) {
-
-        if (indiceEditando !== null && index === indiceEditando) {
-            return false;
-        }
-
-        return (
-            cita.fecha === datosCita.fecha &&
-            cita.hora === datosCita.hora &&
-            cita.agente === datosCita.agente
-        );
-
-    });
-
-
-    if (citaDuplicada) {
-
-        alert(
-            'Ya existe una cita programada para ese agente, fecha y hora.'
-        );
-
-        return;
-    }
-
-
-    /* =====================================================
-       EDITAR CITA
-       ===================================================== */
-
-    if (indiceEditando !== null) {
-
-        citas[indiceEditando] = datosCita;
-
-        indiceEditando = null;
-
-        alert('La cita fue actualizada correctamente.');
-
-    }
-
-    /* =====================================================
-       NUEVA CITA
-       ===================================================== */
-
-    else {
-
-        citas.push(datosCita);
-
-        alert('La cita fue programada correctamente.');
-
-    }
-
 
     guardarCitas();
 
+    /* Mostrar citas */
     mostrarCitas();
 
-    limpiarFormulario();
+    /* Limpiar formulario */
+    formulario.reset();
+
+    establecerFechaMinima();
 
 });
 
@@ -241,10 +133,11 @@ function mostrarCitas() {
 
     listaCitas.innerHTML = '';
 
+    contadorCitas.textContent =
+        citas.length === 1
+            ? '1 cita'
+            : `${citas.length} citas`;
 
-    /* =====================================================
-       SIN CITAS
-       ===================================================== */
 
     if (citas.length === 0) {
 
@@ -255,48 +148,26 @@ function mostrarCitas() {
             </div>
         `;
 
-        contadorCitas.textContent = '0 citas';
-
         return;
     }
 
 
-    /* =====================================================
-       CONTADOR
-       ===================================================== */
-
-    if (citas.length === 1) {
-
-        contadorCitas.textContent = '1 cita';
-
-    } else {
-
-        contadorCitas.textContent = `${citas.length} citas`;
-
-    }
-
-
-    /* =====================================================
-       CREAR CITAS
-       ===================================================== */
-
     citas.forEach(function (cita, index) {
 
-        const citaHTML = document.createElement('div');
+        const elemento = document.createElement('div');
 
-        citaHTML.className = 'cita';
+        elemento.className = 'cita';
 
-        citaHTML.innerHTML = `
+        elemento.innerHTML = `
 
             <div class="cita-cabecera">
 
                 <h3>
-                    🚗 ${escapeHTML(cita.marca)}
-                    ${escapeHTML(cita.modelo)}
+                    🚗 ${cita.marca} ${cita.modelo}
                 </h3>
 
                 <span class="estado">
-                    ${escapeHTML(cita.estado)}
+                    ${cita.estado}
                 </span>
 
             </div>
@@ -306,38 +177,37 @@ function mostrarCitas() {
 
                 <p>
                     <strong>👤 Conductor:</strong>
-                    ${escapeHTML(cita.nombre)}
+                    ${cita.nombre}
                 </p>
 
                 <p>
                     <strong>📞 Teléfono:</strong>
-                    ${escapeHTML(cita.telefono)}
+                    ${cita.telefono}
                 </p>
 
                 <p>
                     <strong>📧 Correo:</strong>
-                    ${escapeHTML(cita.correo)}
+                    ${cita.correo}
                 </p>
 
                 <p>
                     <strong>🚘 Vehículo:</strong>
-                    ${escapeHTML(cita.marca)}
-                    ${escapeHTML(cita.modelo)}
+                    ${cita.marca} ${cita.modelo}
                 </p>
 
                 <p>
                     <strong>📅 Año:</strong>
-                    ${escapeHTML(cita.anio)}
+                    ${cita.anio}
                 </p>
 
                 <p>
                     <strong>🔖 Placa:</strong>
-                    ${escapeHTML(cita.placa)}
+                    ${cita.placa}
                 </p>
 
                 <p>
                     <strong>🔧 Servicio:</strong>
-                    ${escapeHTML(cita.tipoServicio)}
+                    ${cita.tipoServicio}
                 </p>
 
                 <p>
@@ -352,7 +222,7 @@ function mostrarCitas() {
 
                 <p>
                     <strong>👨‍🔧 Agente:</strong>
-                    ${escapeHTML(cita.agente)}
+                    ${cita.agente}
                 </p>
 
             </div>
@@ -363,16 +233,14 @@ function mostrarCitas() {
                 <button
                     type="button"
                     class="btn-editar"
-                    onclick="editarCita(${index})"
-                >
+                    onclick="editarCita(${index})">
                     ✏️ Editar
                 </button>
 
                 <button
                     type="button"
                     class="btn-eliminar"
-                    onclick="eliminarCita(${index})"
-                >
+                    onclick="eliminarCita(${index})">
                     🗑️ Eliminar
                 </button>
 
@@ -380,7 +248,7 @@ function mostrarCitas() {
 
         `;
 
-        listaCitas.appendChild(citaHTML);
+        listaCitas.appendChild(elemento);
 
     });
 
@@ -388,79 +256,48 @@ function mostrarCitas() {
 
 
 /* =========================================================
-   EDITAR CITA
+   EDITAR
    ========================================================= */
 
 function editarCita(index) {
 
     const cita = citas[index];
 
-    if (!cita) {
-        return;
-    }
+    document.getElementById('nombre').value = cita.nombre;
+    document.getElementById('telefono').value = cita.telefono;
+    document.getElementById('correo').value = cita.correo;
 
+    document.getElementById('marca').value = cita.marca;
+    document.getElementById('modelo').value = cita.modelo;
+    document.getElementById('anio').value = cita.anio;
+    document.getElementById('placa').value = cita.placa;
+    document.getElementById('tipoServicio').value = cita.tipoServicio;
 
-    nombre.value = cita.nombre;
-    telefono.value = cita.telefono;
-    correo.value = cita.correo;
-
-    marca.value = cita.marca;
-    modelo.value = cita.modelo;
-    anio.value = cita.anio;
-    placa.value = cita.placa;
-    tipoServicio.value = cita.tipoServicio;
-
-    fecha.value = cita.fecha;
-    hora.value = cita.hora;
-    agente.value = cita.agente;
-
+    document.getElementById('fecha').value = cita.fecha;
+    document.getElementById('hora').value = cita.hora;
+    document.getElementById('agente').value = cita.agente;
 
     indiceEditando = index;
 
-
-    /* =====================================================
-       CAMBIAR TEXTO DEL BOTÓN
-       ===================================================== */
-
-    const btnGuardar = document.getElementById('btnGuardar');
-
-    btnGuardar.innerHTML = '💾 Actualizar cita';
-
-
-    /* =====================================================
-       SUBIR AL FORMULARIO
-       ===================================================== */
+    document.getElementById('btnGuardar').innerHTML =
+        '💾 Actualizar cita';
 
     formulario.scrollIntoView({
-        behavior: 'smooth',
-        block: 'start'
+        behavior: 'smooth'
     });
 
 }
 
 
 /* =========================================================
-   ELIMINAR CITA
+   ELIMINAR
    ========================================================= */
 
 function eliminarCita(index) {
 
-    const cita = citas[index];
-
-    if (!cita) {
+    if (!confirm('¿Deseas eliminar esta cita?')) {
         return;
     }
-
-
-    const confirmar = confirm(
-        `¿Deseas eliminar la cita de ${cita.nombre}?`
-    );
-
-
-    if (!confirmar) {
-        return;
-    }
-
 
     citas.splice(index, 1);
 
@@ -468,83 +305,54 @@ function eliminarCita(index) {
 
     mostrarCitas();
 
-
-    /* =====================================================
-       SI ESTABA EDITANDO ESA CITA
-       ===================================================== */
-
-    if (indiceEditando === index) {
-
-        indiceEditando = null;
-
-        limpiarFormulario();
-
-    }
-
-
-    /* =====================================================
-       AJUSTAR ÍNDICE SI SE ELIMINA ANTES
-       ===================================================== */
-
-    else if (
-        indiceEditando !== null &&
-        index < indiceEditando
-    ) {
-
-        indiceEditando--;
-
-    }
-
 }
 
 
 /* =========================================================
-   BOTÓN LIMPIAR
+   LIMPIAR
    ========================================================= */
 
 btnLimpiar.addEventListener('click', function () {
 
-    limpiarFormulario();
+    formulario.reset();
+
+    indiceEditando = -1;
+
+    document.getElementById('btnGuardar').innerHTML =
+        '📅 Programar cita';
+
+    establecerFechaMinima();
 
 });
 
 
 /* =========================================================
-   LIMPIAR FORMULARIO
+   FECHA MÍNIMA
    ========================================================= */
 
-function limpiarFormulario() {
+function establecerFechaMinima() {
 
-    formulario.reset();
+    const hoy = new Date();
 
-    indiceEditando = null;
+    const anio = hoy.getFullYear();
+    const mes = String(hoy.getMonth() + 1).padStart(2, '0');
+    const dia = String(hoy.getDate()).padStart(2, '0');
 
-
-    const btnGuardar = document.getElementById('btnGuardar');
-
-    btnGuardar.innerHTML = '📅 Programar cita';
-
-
-    establecerFechaMinima();
+    document.getElementById('fecha').min =
+        `${anio}-${mes}-${dia}`;
 
 }
 
 
 /* =========================================================
-   FORMATEAR FECHA
+   FORMATO FECHA
    ========================================================= */
 
-function formatearFecha(fechaTexto) {
+function formatearFecha(fecha) {
 
-    if (!fechaTexto) {
-        return '';
-    }
+    if (!fecha) return '';
 
-    const partes = fechaTexto.split('-');
-
-    if (partes.length !== 3) {
-        return fechaTexto;
-    }
+    const partes = fecha.split('-');
 
     return `${partes[2]}/${partes[1]}/${partes[0]}`;
 
@@ -552,34 +360,26 @@ function formatearFecha(fechaTexto) {
 
 
 /* =========================================================
-   FORMATEAR HORA
+   FORMATO HORA
    ========================================================= */
 
-function formatearHora(horaTexto) {
+function formatearHora(hora) {
 
-    if (!horaTexto) {
-        return '';
-    }
+    if (!hora) return '';
 
-    const partes = horaTexto.split(':');
+    const partes = hora.split(':');
 
-    if (partes.length < 2) {
-        return horaTexto;
-    }
-
-    let horas = parseInt(partes[0], 10);
+    let horas = parseInt(partes[0]);
     const minutos = partes[1];
 
     let periodo = 'AM';
 
     if (horas >= 12) {
-
         periodo = 'PM';
 
         if (horas > 12) {
             horas -= 12;
         }
-
     }
 
     if (horas === 0) {
@@ -587,25 +387,5 @@ function formatearHora(horaTexto) {
     }
 
     return `${horas}:${minutos} ${periodo}`;
-
-}
-
-
-/* =========================================================
-   SEGURIDAD HTML
-   ========================================================= */
-
-function escapeHTML(texto) {
-
-    if (texto === null || texto === undefined) {
-        return '';
-    }
-
-    return String(texto)
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#039;');
 
 }
