@@ -1,343 +1,982 @@
+/* =========================================================
+   FLEXICAR - ESTILOS
+   ========================================================= */
+
+
+/* =========================================================
+   CONFIGURACIÓN GENERAL
+   ========================================================= */
+
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
+
 body {
+
     font-family: Arial, Helvetica, sans-serif;
-    background-color: #f2f5f9;
+
+    background: #f2f5f9;
+
     color: #1f2937;
+
+    line-height: 1.6;
+
 }
 
 
-/* ENCABEZADO */
-
-.encabezado {
-    background-color: #0f172a;
-    color: white;
-    padding: 25px 8%;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
-
-.logo {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.icono-auto {
-    font-size: 35px;
-}
-
-.logo h1 {
-    font-size: 30px;
-}
-
-.encabezado p {
-    color: #cbd5e1;
-}
-
-
-/* CONTENEDOR */
+/* =========================================================
+   CONTENEDOR
+   ========================================================= */
 
 .contenedor {
+
     width: 90%;
-    max-width: 1100px;
-    margin: 35px auto;
+
+    max-width: 1200px;
+
+    margin: auto;
+
 }
 
 
-/* BIENVENIDA */
+/* =========================================================
+   ENCABEZADO
+   ========================================================= */
+
+.encabezado {
+
+    background: #0f172a;
+
+    color: white;
+
+    padding: 25px 0;
+
+}
+
+
+.encabezado h1 {
+
+    font-size: 32px;
+
+    margin-bottom: 5px;
+
+}
+
+
+.encabezado p {
+
+    color: #cbd5e1;
+
+}
+
+
+/* =========================================================
+   BIENVENIDA
+   ========================================================= */
 
 .bienvenida {
-    background-color: #2563eb;
+
+    background: #2563eb;
+
     color: white;
+
     padding: 30px;
-    border-radius: 15px;
-    margin-bottom: 25px;
+
+    margin: 30px 0;
+
+    border-radius: 12px;
+
 }
+
 
 .bienvenida h2 {
-    margin-bottom: 10px;
+
+    margin-bottom: 8px;
+
     font-size: 28px;
-}
 
-.bienvenida p {
-    line-height: 1.6;
 }
 
 
-/* TARJETAS */
+/* =========================================================
+   TARJETAS
+   ========================================================= */
 
 .tarjeta {
-    background-color: white;
-    padding: 30px;
-    border-radius: 15px;
-    margin-bottom: 25px;
-    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+
+    background: white;
+
+    padding: 25px;
+
+    margin-bottom: 30px;
+
+    border-radius: 12px;
+
+    box-shadow:
+        0 4px 15px rgba(0, 0, 0, 0.08);
+
 }
 
-.tarjeta h2 {
-    margin-bottom: 25px;
-}
 
-
-/* SECCIONES */
+/* =========================================================
+   SECCIONES
+   ========================================================= */
 
 .seccion {
-    border-top: 1px solid #e5e7eb;
-    padding-top: 25px;
-    margin-top: 25px;
+
+    margin-bottom: 30px;
+
+    padding-bottom: 25px;
+
+    border-bottom: 1px solid #e2e8f0;
+
 }
 
-.seccion h3 {
+
+.seccion:last-child {
+
+    border-bottom: none;
+
+}
+
+
+.seccion h2 {
+
     margin-bottom: 20px;
-    color: #1d4ed8;
+
+    color: #0f172a;
+
 }
 
 
-/* GRID */
+/* =========================================================
+   GRID
+   ========================================================= */
 
 .grid {
+
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+
+    grid-template-columns:
+        repeat(2, 1fr);
+
     gap: 20px;
+
 }
 
 
-/* CAMPOS */
+/* =========================================================
+   CAMPOS
+   ========================================================= */
 
 .campo {
+
     display: flex;
+
     flex-direction: column;
-    gap: 8px;
+
 }
 
+
 .campo label {
+
     font-weight: bold;
+
+    margin-bottom: 7px;
+
 }
+
 
 .campo input,
 .campo select {
+
     width: 100%;
+
     padding: 12px;
+
     border: 1px solid #cbd5e1;
+
     border-radius: 8px;
+
     font-size: 15px;
-    background-color: white;
-    outline: none;
+
+    background: white;
+
 }
+
 
 .campo input:focus,
 .campo select:focus {
+
+    outline: none;
+
     border-color: #2563eb;
-    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.15);
+
+    box-shadow:
+        0 0 0 3px rgba(37, 99, 235, 0.12);
+
 }
 
 
-/* BOTONES */
+.campo small {
 
-.botones {
-    display: flex;
+    display: block;
+
+    margin-top: 7px;
+
+    color: #64748b;
+
+    font-size: 13px;
+
+}
+
+
+/* =========================================================
+   RESUMEN DEL SERVICIO
+   ========================================================= */
+
+.resumen-servicio {
+
+    margin-top: 20px;
+
+    padding: 20px;
+
+    background: #eff6ff;
+
+    border: 1px solid #bfdbfe;
+
+    border-radius: 10px;
+
+}
+
+
+.resumen-servicio h3 {
+
+    margin-bottom: 15px;
+
+    color: #1e3a8a;
+
+}
+
+
+.resumen-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, 1fr);
+
     gap: 15px;
-    margin-top: 30px;
+
 }
 
-button {
-    border: none;
-    padding: 13px 22px;
+
+.resumen-grid div {
+
+    background: white;
+
+    padding: 15px;
+
     border-radius: 8px;
-    font-size: 15px;
-    font-weight: bold;
-    cursor: pointer;
+
 }
+
+
+.resumen-grid span {
+
+    display: block;
+
+    color: #64748b;
+
+    margin-bottom: 5px;
+
+}
+
+
+.resumen-grid strong {
+
+    font-size: 20px;
+
+    color: #2563eb;
+
+}
+
+
+/* =========================================================
+   DOCUMENTACIÓN
+   ========================================================= */
+
+.texto-documentacion {
+
+    color: #64748b;
+
+    margin-bottom: 15px;
+
+}
+
+
+/* =========================================================
+   LISTA DE DOCUMENTOS
+   ========================================================= */
+
+.lista-documentos {
+
+    margin-top: 15px;
+
+}
+
+
+.lista-documentos h4 {
+
+    margin-bottom: 10px;
+
+}
+
+
+.documento-seleccionado {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    gap: 10px;
+
+    background: #f1f5f9;
+
+    padding: 10px 12px;
+
+    margin-bottom: 8px;
+
+    border-radius: 8px;
+
+}
+
+
+.documento-seleccionado button {
+
+    border: none;
+
+    background: transparent;
+
+    cursor: pointer;
+
+    font-size: 16px;
+
+}
+
+
+/* =========================================================
+   BOTONES DEL FORMULARIO
+   ========================================================= */
+
+.botones-formulario {
+
+    display: flex;
+
+    gap: 15px;
+
+    margin-top: 20px;
+
+}
+
+
+.btn-guardar,
+.btn-limpiar {
+
+    border: none;
+
+    padding: 13px 20px;
+
+    border-radius: 8px;
+
+    cursor: pointer;
+
+    font-size: 15px;
+
+    font-weight: bold;
+
+}
+
 
 .btn-guardar {
-    background-color: #2563eb;
+
+    background: #2563eb;
+
     color: white;
+
 }
+
 
 .btn-guardar:hover {
-    background-color: #1d4ed8;
+
+    background: #1d4ed8;
+
 }
+
 
 .btn-limpiar {
-    background-color: #e5e7eb;
-    color: #374151;
+
+    background: #e2e8f0;
+
+    color: #1f2937;
+
 }
+
 
 .btn-limpiar:hover {
-    background-color: #d1d5db;
+
+    background: #cbd5e1;
+
 }
 
 
-/* TITULO DE CITAS */
+/* =========================================================
+   TÍTULO DE CITAS
+   ========================================================= */
 
 .titulo-citas {
+
     display: flex;
+
     justify-content: space-between;
+
     align-items: center;
+
+    margin-bottom: 20px;
+
 }
+
+
+.titulo-citas h2 {
+
+    color: #0f172a;
+
+}
+
 
 #contadorCitas {
-    background-color: #dbeafe;
-    color: #1d4ed8;
-    padding: 8px 15px;
+
+    background: #2563eb;
+
+    color: white;
+
+    padding: 7px 12px;
+
     border-radius: 20px;
-    font-weight: bold;
+
+    font-size: 14px;
+
 }
 
 
-/* LISTA DE CITAS */
+/* =========================================================
+   LISTA DE CITAS
+   ========================================================= */
 
 .lista-citas {
+
     display: flex;
+
     flex-direction: column;
-    gap: 15px;
+
+    gap: 20px;
+
 }
 
 
-/* CITA */
+/* =========================================================
+   CITA
+   ========================================================= */
 
 .cita {
-    border: 1px solid #dbeafe;
-    border-left: 5px solid #2563eb;
+
+    border: 1px solid #e2e8f0;
+
+    border-radius: 12px;
+
     padding: 20px;
-    border-radius: 10px;
-    background-color: #f8fafc;
+
+    position: relative;
+
 }
 
-.cita-cabecera {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+
+.cita h3 {
+
     margin-bottom: 15px;
+
+    color: #0f172a;
+
 }
 
-.cita-cabecera h3 {
-    color: #1d4ed8;
-}
+
+/* =========================================================
+   ESTADO
+   ========================================================= */
 
 .estado {
-    background-color: #dcfce7;
-    color: #166534;
-    padding: 5px 10px;
-    border-radius: 15px;
+
+    display: inline-block;
+
+    background: #dbeafe;
+
+    color: #1d4ed8;
+
+    padding: 5px 12px;
+
+    border-radius: 20px;
+
     font-size: 13px;
+
     font-weight: bold;
+
+    margin-bottom: 10px;
+
 }
 
 
-/* INFORMACIÓN */
+.estado.finalizada {
+
+    background: #dcfce7;
+
+    color: #166534;
+
+}
+
+
+/* =========================================================
+   INFORMACIÓN DE LA CITA
+   ========================================================= */
 
 .informacion-cita {
+
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
+
+    grid-template-columns:
+        repeat(2, 1fr);
+
+    gap: 8px;
+
 }
+
 
 .informacion-cita p {
-    line-height: 1.5;
+
+    padding: 5px 0;
+
 }
 
-.informacion-cita strong {
-    color: #374151;
+
+/* =========================================================
+   DOCUMENTOS DE LA CITA
+   ========================================================= */
+
+.documentos-cita {
+
+    margin-top: 20px;
+
+    padding: 15px;
+
+    background: #f8fafc;
+
+    border-radius: 10px;
+
+    border: 1px solid #e2e8f0;
+
 }
 
 
-/* ACCIONES */
+.documentos-cita h4 {
+
+    margin-bottom: 10px;
+
+}
+
+
+.documento-cita {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    gap: 10px;
+
+    padding: 10px;
+
+    background: white;
+
+    border-radius: 7px;
+
+    margin-bottom: 7px;
+
+}
+
+
+.documento-cita button {
+
+    background: #2563eb;
+
+    color: white;
+
+    border: none;
+
+    padding: 7px 12px;
+
+    border-radius: 6px;
+
+    cursor: pointer;
+
+}
+
+
+.documento-cita button:hover {
+
+    background: #1d4ed8;
+
+}
+
+
+/* =========================================================
+   ACCIONES
+   ========================================================= */
 
 .acciones {
+
     display: flex;
-    gap: 10px;
-    margin-top: 18px;
+
+    flex-wrap: wrap;
+
+    gap: 8px;
+
+    margin-top: 20px;
+
 }
+
+
+.acciones button {
+
+    border: none;
+
+    padding: 10px 14px;
+
+    border-radius: 7px;
+
+    cursor: pointer;
+
+    font-weight: bold;
+
+}
+
 
 .btn-editar {
-    background-color: #f59e0b;
+
+    background: #f59e0b;
+
     color: white;
+
 }
+
 
 .btn-editar:hover {
-    background-color: #d97706;
+
+    background: #d97706;
+
 }
+
 
 .btn-eliminar {
-    background-color: #dc2626;
+
+    background: #dc2626;
+
     color: white;
+
 }
+
 
 .btn-eliminar:hover {
-    background-color: #b91c1c;
+
+    background: #b91c1c;
+
 }
 
 
-/* SIN CITAS */
+.btn-finalizar {
+
+    background: #16a34a;
+
+    color: white;
+
+}
+
+
+.btn-finalizar:hover {
+
+    background: #15803d;
+
+}
+
+
+.btn-whatsapp {
+
+    background: #25D366;
+
+    color: white;
+
+}
+
+
+.btn-whatsapp:hover {
+
+    background: #128C7E;
+
+}
+
+
+/* =========================================================
+   SIN CITAS
+   ========================================================= */
 
 .sin-citas {
+
     text-align: center;
-    padding: 35px;
+
+    padding: 40px;
+
     color: #64748b;
-}
 
-.sin-citas h3 {
-    margin-bottom: 10px;
 }
 
 
-/* PIE DE PAGINA */
+/* =========================================================
+   NOTIFICACIÓN
+   ========================================================= */
+
+.notificacion-flexicar {
+
+    position: fixed;
+
+    top: 20px;
+
+    right: 20px;
+
+    width: 350px;
+
+    max-width:
+        calc(100% - 40px);
+
+    background: white;
+
+    color: #1f2937;
+
+    padding: 18px;
+
+    border-radius: 12px;
+
+    box-shadow:
+        0 8px 25px rgba(0, 0, 0, 0.25);
+
+    z-index: 9999;
+
+    border-left:
+        5px solid #2563eb;
+
+    animation:
+        aparecerNotificacion
+        0.3s ease;
+
+}
+
+
+.notificacion-flexicar strong {
+
+    display: block;
+
+    font-size: 17px;
+
+    margin-bottom: 8px;
+
+}
+
+
+.notificacion-flexicar p {
+
+    margin: 0;
+
+    line-height: 1.5;
+
+}
+
+
+.notificacion-flexicar button {
+
+    position: absolute;
+
+    top: 8px;
+
+    right: 10px;
+
+    border: none;
+
+    background: transparent;
+
+    font-size: 18px;
+
+    cursor: pointer;
+
+}
+
+
+@keyframes aparecerNotificacion {
+
+    from {
+
+        opacity: 0;
+
+        transform:
+            translateX(100px);
+
+    }
+
+    to {
+
+        opacity: 1;
+
+        transform:
+            translateX(0);
+
+    }
+
+}
+
+
+/* =========================================================
+   PIE DE PÁGINA
+   ========================================================= */
 
 footer {
-    background-color: #0f172a;
-    color: #cbd5e1;
+
+    background: #0f172a;
+
+    color: white;
+
+    padding: 25px 0;
+
     text-align: center;
-    padding: 25px;
+
     margin-top: 40px;
+
 }
 
 
-/* RESPONSIVE */
+footer p {
+
+    color: #cbd5e1;
+
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
 
 @media (max-width: 768px) {
 
-    .encabezado {
-        flex-direction: column;
-        gap: 10px;
-        text-align: center;
+    .grid {
+
+        grid-template-columns: 1fr;
+
     }
 
-    .grid {
+
+    .resumen-grid {
+
         grid-template-columns: 1fr;
+
     }
+
 
     .informacion-cita {
+
         grid-template-columns: 1fr;
+
     }
+
+
+    .botones-formulario {
+
+        flex-direction: column;
+
+    }
+
+
+    .btn-guardar,
+    .btn-limpiar {
+
+        width: 100%;
+
+    }
+
 
     .titulo-citas {
+
         flex-direction: column;
+
         align-items: flex-start;
+
         gap: 10px;
+
     }
 
-    .botones {
-        flex-direction: column;
-    }
-
-    .botones button {
-        width: 100%;
-    }
 
     .acciones {
+
         flex-direction: column;
+
     }
 
+
     .acciones button {
+
         width: 100%;
+
+    }
+
+
+    .documento-cita {
+
+        flex-direction: column;
+
+        align-items: stretch;
+
+    }
+
+
+    .documento-cita button {
+
+        width: 100%;
+
+    }
+
+
+    .notificacion-flexicar {
+
+        top: 10px;
+
+        right: 10px;
+
+        left: 10px;
+
+        width: auto;
+
+        max-width: none;
+
     }
 
 }
-
