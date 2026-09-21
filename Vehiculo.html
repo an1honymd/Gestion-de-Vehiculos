@@ -1,328 +1,517 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
-
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Vehículos | Taller motor veloz</title>
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+    <!-- Font Awesome -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
-    <title>
-        FlexiCar - Citas de Mantenimiento
-    </title>
-
-    <link
-        rel="stylesheet"
-        href="vehiculo.css"
-    >
-
+    <link rel="stylesheet" href="vehiculo.css">
 </head>
-
 
 <body>
 
+    <!-- =========================
+         HEADER
+    ========================== -->
+    <header class="header">
+        <div class="header-contenido">
 
-    <!-- =====================================================
-         ENCABEZADO
-         ===================================================== -->
+            <div class="logo">
+                <div class="logo-icono">
+                    <i class="fa-solid fa-car"></i>
+                </div>
 
-    <header class="encabezado">
+                <div>
+                    <h1>Gestión de Vehículos</h1>
+                    <span>Taller UMG</span>
+                </div>
+            </div>
 
-        <div class="contenedor">
+            <nav class="navbar">
+                <a href="#inicio">
+                    <i class="fa-solid fa-house"></i>
+                    Inicio
+                </a>
 
-            <h1>
-                🚗 FlexiCar
-            </h1>
+                <a href="#formulario">
+                    <i class="fa-solid fa-calendar-plus"></i>
+                    Nueva cita
+                </a>
 
-            <p>
-                Mantenimiento y mecánica automotriz
-            </p>
+                <a href="#citas">
+                    <i class="fa-solid fa-calendar-check"></i>
+                    Citas
+                </a>
+            </nav>
 
         </div>
-
     </header>
 
 
+    <main class="contenedor" id="inicio">
 
-    <!-- =====================================================
-         CONTENIDO PRINCIPAL
-         ===================================================== -->
+        <!-- =========================
+             TITULO
+        ========================== -->
+        <section class="bienvenida card">
+            <div>
+                <span class="etiqueta">
+                    <i class="fa-solid fa-screwdriver-wrench"></i>
+                    SISTEMA DE TALLER
+                </span>
 
-    <main class="contenedor">
+                <h2>Programa el mantenimiento de tu vehículo</h2>
+
+                <p>
+                    Gestiona las citas de mantenimiento, consulta su estado
+                    y mantén organizada la información de cada vehículo.
+                </p>
+            </div>
+
+            <div class="bienvenida-icono">
+                <i class="fa-solid fa-car-side"></i>
+            </div>
+        </section>
 
 
-        <!-- =================================================
-             BIENVENIDA
-             ================================================= -->
+        <!-- =========================
+             DASHBOARD
+        ========================== -->
+        <section class="dashboard">
 
-        <section class="bienvenida">
+            <div class="dashboard-card azul">
+                <div class="dashboard-icono">
+                    <i class="fa-solid fa-calendar-day"></i>
+                </div>
 
-            <h2>
-                Programa tu mantenimiento
-            </h2>
+                <div>
+                    <span>Total citas hoy</span>
+                    <strong id="totalCitasHoy">0</strong>
+                </div>
+            </div>
 
-            <p>
-                Agenda tu cita de mantenimiento de forma
-                rápida, sencilla y segura.
-            </p>
+
+            <div class="dashboard-card naranja">
+                <div class="dashboard-icono">
+                    <i class="fa-solid fa-spinner"></i>
+                </div>
+
+                <div>
+                    <span>En proceso</span>
+                    <strong id="citasEnProceso">0</strong>
+                </div>
+            </div>
+
+
+            <div class="dashboard-card verde">
+                <div class="dashboard-icono">
+                    <i class="fa-solid fa-circle-check"></i>
+                </div>
+
+                <div>
+                    <span>Finalizadas</span>
+                    <strong id="citasFinalizadas">0</strong>
+                </div>
+            </div>
 
         </section>
 
 
-
-        <!-- =================================================
+        <!-- =========================
              FORMULARIO
-             ================================================= -->
+        ========================== -->
+        <section class="card formulario-card" id="formulario">
 
-        <form
-            id="formularioCita"
-            class="tarjeta"
-        >
+            <div class="titulo-seccion">
+                <div>
+                    <span class="numero-seccion">01</span>
 
+                    <div>
+                        <h2>
+                            <i class="fa-solid fa-calendar-plus"></i>
+                            Programar una cita
+                        </h2>
 
-            <!-- =============================================
-                 DATOS DEL CLIENTE
-                 ============================================= -->
-
-            <section class="seccion">
-
-                <h2>
-                    👤 Datos del cliente
-                </h2>
-
-
-                <div class="grid">
-
-
-                    <div class="campo">
-
-                        <label for="nombre">
-                            Nombre completo
-                        </label>
-
-                        <input
-                            type="text"
-                            id="nombre"
-                            placeholder="Ingrese su nombre"
-                            required
-                        >
-
+                        <p>Complete la información solicitada.</p>
                     </div>
+                </div>
+            </div>
 
 
+            <!-- BARRA DE PROGRESO -->
+            <div class="progreso-contenedor">
 
-                    <div class="campo">
-
-                        <label for="telefono">
-                            Teléfono
-                        </label>
-
-                        <input
-                            type="tel"
-                            id="telefono"
-                            placeholder="Ej. 55555555"
-                            required
-                        >
-
-                    </div>
-
-
-
-                    <div class="campo">
-
-                        <label for="correo">
-                            Correo electrónico
-                        </label>
-
-                        <input
-                            type="email"
-                            id="correo"
-                            placeholder="ejemplo@correo.com"
-                            required
-                        >
-
-                    </div>
-
-
+                <div class="progreso-info">
+                    <span>Progreso del formulario</span>
+                    <strong id="textoProgreso">Paso 1 de 5</strong>
                 </div>
 
-            </section>
-
-
-
-            <!-- =============================================
-                 DATOS DEL VEHÍCULO
-                 ============================================= -->
-
-            <section class="seccion">
-
-                <h2>
-                    🚗 Datos del vehículo
-                </h2>
-
-
-                <div class="grid">
-
-
-                    <div class="campo">
-
-                        <label for="marca">
-                            Marca
-                        </label>
-
-                        <input
-                            type="text"
-                            id="marca"
-                            placeholder="Ej. Toyota"
-                            required
-                        >
-
-                    </div>
-
-
-
-                    <div class="campo">
-
-                        <label for="modelo">
-                            Modelo
-                        </label>
-
-                        <input
-                            type="text"
-                            id="modelo"
-                            placeholder="Ej. Corolla"
-                            required
-                        >
-
-                    </div>
-
-
-
-                    <div class="campo">
-
-                        <label for="anio">
-                            Año
-                        </label>
-
-                        <input
-                            type="number"
-                            id="anio"
-                            min="1950"
-                            max="2026"
-                            placeholder="Ej. 2020"
-                            required
-                        >
-
-                    </div>
-
-
-
-                    <div class="campo">
-
-                        <label for="placa">
-                            Placa
-                        </label>
-
-                        <input
-                            type="text"
-                            id="placa"
-                            placeholder="Ej. P123ABC"
-                            required
-                        >
-
-                    </div>
-
-
+                <div class="progreso-barra">
+                    <div id="barraProgreso"></div>
                 </div>
 
-            </section>
+            </div>
 
 
+            <form id="formularioCita">
 
-            <!-- =============================================
-                 SERVICIO
-                 ============================================= -->
+                <!-- =========================
+                     CLIENTE
+                ========================== -->
+                <div class="formulario-bloque">
 
-            <section class="seccion">
-
-                <h2>
-                    🔧 Servicio de mantenimiento
-                </h2>
-
-
-                <div class="campo">
-
-                    <label for="tipoServicio">
-                        Tipo de servicio
-                    </label>
-
-                    <select
-                        id="tipoServicio"
-                        required
-                    >
-
-                        <option value="">
-                            Seleccione un servicio
-                        </option>
-
-                        <option value="Mantenimiento preventivo">
-                            Mantenimiento preventivo
-                        </option>
-
-                        <option value="Diagnóstico">
-                            Diagnóstico
-                        </option>
-
-                        <option value="Reparación">
-                            Reparación
-                        </option>
-
-                        <option value="Cambio de aceite">
-                            Cambio de aceite
-                        </option>
-
-                        <option value="Cambio de componentes">
-                            Cambio de componentes
-                        </option>
-
-                    </select>
-
-                </div>
-
-
-                <div class="resumen-servicio">
-
-                    <h3>
-                        📊 Información del mantenimiento
-                    </h3>
-
-                    <div class="resumen-grid">
+                    <div class="subtitulo-formulario">
+                        <i class="fa-solid fa-user"></i>
 
                         <div>
+                            <h3>Información del cliente</h3>
+                            <p>Datos de contacto del propietario.</p>
+                        </div>
+                    </div>
 
+
+                    <div class="grid">
+
+                        <div class="campo">
+                            <label for="nombre">
+                                Nombre completo
+                            </label>
+
+                            <div class="input-icono">
+                                <i class="fa-solid fa-user"></i>
+
+                                <input
+                                    type="text"
+                                    id="nombre"
+                                    placeholder="Ingrese el nombre completo"
+                                    required
+                                >
+                            </div>
+
+                            <small class="mensaje-validacion"
+                                   id="validacionNombre"></small>
+                        </div>
+
+
+                        <div class="campo">
+                            <label for="telefono">
+                                Teléfono
+                            </label>
+
+                            <div class="input-icono">
+                                <i class="fa-solid fa-phone"></i>
+
+                                <input
+                                    type="tel"
+                                    id="telefono"
+                                    placeholder="Ej. 55555555"
+                                    required
+                                >
+                            </div>
+
+                            <small class="mensaje-validacion"
+                                   id="validacionTelefono"></small>
+                        </div>
+
+
+                        <div class="campo campo-completo">
+                            <label for="correo">
+                                Correo electrónico
+                            </label>
+
+                            <div class="input-icono">
+                                <i class="fa-solid fa-envelope"></i>
+
+                                <input
+                                    type="email"
+                                    id="correo"
+                                    placeholder="correo@ejemplo.com"
+                                    required
+                                >
+                            </div>
+
+                            <small class="mensaje-validacion"
+                                   id="validacionCorreo"></small>
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- =========================
+                     VEHICULO
+                ========================== -->
+                <div class="formulario-bloque">
+
+                    <div class="subtitulo-formulario">
+                        <i class="fa-solid fa-car"></i>
+
+                        <div>
+                            <h3>Información del vehículo</h3>
+                            <p>Datos del automóvil que ingresará al taller.</p>
+                        </div>
+                    </div>
+
+
+                    <div class="grid">
+
+                        <div class="campo">
+                            <label for="marca">
+                                Marca
+                            </label>
+
+                            <div class="input-icono">
+                                <i class="fa-solid fa-car"></i>
+
+                                <input
+                                    type="text"
+                                    id="marca"
+                                    placeholder="Ej. Toyota"
+                                    required
+                                >
+                            </div>
+                        </div>
+
+
+                        <div class="campo">
+                            <label for="modelo">
+                                Modelo
+                            </label>
+
+                            <div class="input-icono">
+                                <i class="fa-solid fa-car-side"></i>
+
+                                <input
+                                    type="text"
+                                    id="modelo"
+                                    placeholder="Ej. Corolla"
+                                    required
+                                >
+                            </div>
+                        </div>
+
+
+                        <div class="campo">
+                            <label for="anio">
+                                Año
+                            </label>
+
+                            <div class="input-icono">
+                                <i class="fa-solid fa-calendar"></i>
+
+                                <input
+                                    type="number"
+                                    id="anio"
+                                    min="1950"
+                                    max="2026"
+                                    placeholder="2020"
+                                    required
+                                >
+                            </div>
+                        </div>
+
+
+                        <div class="campo">
+                            <label for="placa">
+                                Placa
+                            </label>
+
+                            <div class="input-icono">
+                                <i class="fa-solid fa-id-card"></i>
+
+                                <input
+                                    type="text"
+                                    id="placa"
+                                    placeholder="Ej. P123ABC"
+                                    required
+                                >
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- =========================
+                     SERVICIO
+                ========================== -->
+                <div class="formulario-bloque">
+
+                    <div class="subtitulo-formulario">
+                        <i class="fa-solid fa-screwdriver-wrench"></i>
+
+                        <div>
+                            <h3>Servicio requerido</h3>
+                            <p>Seleccione el mantenimiento que necesita.</p>
+                        </div>
+                    </div>
+
+
+                    <div class="campo">
+
+                        <label for="tipoServicio">
+                            Tipo de servicio
+                        </label>
+
+                        <div class="input-icono select-icono">
+                            <i class="fa-solid fa-wrench"></i>
+
+                            <select id="tipoServicio" required>
+                                <option value="">
+                                    Seleccione un servicio
+                                </option>
+
+                                <option value="Mantenimiento preventivo">
+                                    Mantenimiento preventivo
+                                </option>
+
+                                <option value="Diagnóstico">
+                                    Diagnóstico
+                                </option>
+
+                                <option value="Reparación">
+                                    Reparación
+                                </option>
+
+                                <option value="Cambio de aceite">
+                                    Cambio de aceite
+                                </option>
+
+                                <option value="Cambio de componentes">
+                                    Cambio de componentes
+                                </option>
+                            </select>
+                        </div>
+
+                    </div>
+
+
+                    <!-- RESUMEN SERVICIO -->
+                    <div class="resumen-servicio">
+
+                        <div>
                             <span>
-                                💰 Costo estimado
+                                <i class="fa-solid fa-money-bill"></i>
+                                Costo estimado
                             </span>
 
                             <strong id="costoEstimado">
                                 Q0.00
                             </strong>
-
                         </div>
 
 
                         <div>
-
                             <span>
-                                ⏱️ Tiempo estimado
+                                <i class="fa-solid fa-clock"></i>
+                                Tiempo estimado
                             </span>
 
                             <strong id="tiempoEstimado">
-                                --
+                                0 horas
                             </strong>
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- =========================
+                     CITA
+                ========================== -->
+                <div class="formulario-bloque">
+
+                    <div class="subtitulo-formulario">
+                        <i class="fa-solid fa-calendar-check"></i>
+
+                        <div>
+                            <h3>Fecha y horario</h3>
+                            <p>Seleccione cuándo desea realizar el servicio.</p>
+                        </div>
+                    </div>
+
+
+                    <div class="grid">
+
+                        <div class="campo">
+                            <label for="fecha">
+                                Fecha
+                            </label>
+
+                            <div class="input-icono">
+                                <i class="fa-solid fa-calendar-days"></i>
+
+                                <input
+                                    type="date"
+                                    id="fecha"
+                                    required
+                                >
+                            </div>
+
+                            <small class="mensaje-validacion"
+                                   id="validacionFecha"></small>
+                        </div>
+
+
+                        <div class="campo">
+                            <label for="hora">
+                                Hora
+                            </label>
+
+                            <div class="input-icono">
+                                <i class="fa-solid fa-clock"></i>
+
+                                <input
+                                    type="time"
+                                    id="hora"
+                                    min="08:00"
+                                    max="16:00"
+                                    required
+                                >
+                            </div>
+                        </div>
+
+
+                        <div class="campo campo-completo">
+
+                            <label for="agente">
+                                Agente encargado
+                            </label>
+
+                            <div class="input-icono select-icono">
+                                <i class="fa-solid fa-user-tie"></i>
+
+                                <select id="agente" required>
+
+                                    <option value="">
+                                        Seleccione un agente
+                                    </option>
+
+                                    <option value="Carlos López">
+                                        Carlos López
+                                    </option>
+
+                                    <option value="Miguel García">
+                                        Miguel García
+                                    </option>
+
+                                    <option value="José Martínez">
+                                        José Martínez
+                                    </option>
+
+                                    <option value="Daniel Ramírez">
+                                        Daniel Ramírez
+                                    </option>
+
+                                </select>
+                            </div>
 
                         </div>
 
@@ -330,302 +519,168 @@
 
                 </div>
 
-            </section>
+
+                <!-- =========================
+                     DOCUMENTACION
+                ========================== -->
+                <div class="formulario-bloque">
+
+                    <div class="subtitulo-formulario">
+                        <i class="fa-solid fa-file-circle-check"></i>
+
+                        <div>
+                            <h3>Documentación</h3>
+                            <p>
+                                Adjunte seguros, inspecciones u otros documentos.
+                            </p>
+                        </div>
+                    </div>
 
 
+                    <div class="campo">
 
-            <!-- =============================================
-                 DOCUMENTACIÓN
-                 ============================================= -->
+                        <label for="documentos">
+                            Documentos del vehículo
+                        </label>
 
-            <section class="seccion">
+                        <div class="zona-documentos">
 
-                <h2>
-                    📄 Documentación
-                </h2>
+                            <i class="fa-solid fa-cloud-arrow-up"></i>
+
+                            <strong>
+                                Seleccione sus documentos
+                            </strong>
+
+                            <span>
+                                PDF, JPG, JPEG o PNG
+                            </span>
+
+                            <input
+                                type="file"
+                                id="documentos"
+                                accept=".pdf,.jpg,.jpeg,.png"
+                                multiple
+                            >
+
+                        </div>
+
+                        <small>
+                            Tamaño máximo: 5 MB por archivo.
+                        </small>
+
+                    </div>
 
 
-                <p class="texto-documentacion">
+                    <div id="listaDocumentosSeleccionados"
+                         class="lista-documentos">
 
-                    Adjunte los documentos necesarios del
-                    vehículo, como seguro, inspecciones,
-                    tarjeta de circulación u otros.
+                        <p>
+                            No hay documentos seleccionados.
+                        </p>
 
-                </p>
+                    </div>
 
-
-                <div class="campo">
-
-                    <label for="documentos">
-
-                        Documentos del vehículo
-
-                    </label>
+                </div>
 
 
-                    <input
-                        type="file"
-                        id="documentos"
-                        accept=".pdf,.jpg,.jpeg,.png"
-                        multiple
+                <!-- =========================
+                     BOTONES
+                ========================== -->
+                <div class="acciones-formulario">
+
+                    <button
+                        type="button"
+                        id="btnLimpiar"
+                        class="btn btn-secundario"
                     >
+                        <i class="fa-solid fa-eraser"></i>
+                        Limpiar
+                    </button>
 
 
-                    <small>
-
-                        Formatos permitidos:
-                        PDF, JPG, JPEG y PNG.
-                        Tamaño máximo: 5 MB por archivo.
-
-                    </small>
-
-                </div>
-
-
-                <div
-                    id="listaDocumentosSeleccionados"
-                    class="lista-documentos"
-                >
-
-                    <p>
-                        No hay documentos seleccionados.
-                    </p>
+                    <button
+                        type="submit"
+                        id="btnGuardar"
+                        class="btn btn-principal"
+                    >
+                        <i class="fa-solid fa-calendar-plus"></i>
+                        Programar Cita
+                    </button>
 
                 </div>
 
-            </section>
+            </form>
+
+        </section>
 
 
+        <!-- =========================
+             CITAS
+        ========================== -->
+        <section class="card citas-card" id="citas">
 
-            <!-- =============================================
-                 CITA
-                 ============================================= -->
+            <div class="titulo-listado">
 
-            <section class="seccion">
+                <div>
+                    <span class="numero-seccion">02</span>
 
-                <h2>
-                    📅 Datos de la cita
-                </h2>
+                    <div>
+                        <h2>
+                            <i class="fa-solid fa-calendar-check"></i>
+                            Citas programadas
+                        </h2>
 
-
-                <div class="grid">
-
-
-                    <div class="campo">
-
-                        <label for="fecha">
-                            Fecha
-                        </label>
-
-                        <input
-                            type="date"
-                            id="fecha"
-                            required
-                        >
-
+                        <p>
+                            Consulte y administre las citas registradas.
+                        </p>
                     </div>
-
-
-
-                    <div class="campo">
-
-                        <label for="hora">
-                            Hora
-                        </label>
-
-                        <select
-                            id="hora"
-                            required
-                        >
-
-                            <option value="">
-                                Seleccione una hora
-                            </option>
-
-                            <option value="08:00">
-                                08:00 AM
-                            </option>
-
-                            <option value="09:00">
-                                09:00 AM
-                            </option>
-
-                            <option value="10:00">
-                                10:00 AM
-                            </option>
-
-                            <option value="11:00">
-                                11:00 AM
-                            </option>
-
-                            <option value="12:00">
-                                12:00 PM
-                            </option>
-
-                            <option value="13:00">
-                                01:00 PM
-                            </option>
-
-                            <option value="14:00">
-                                02:00 PM
-                            </option>
-
-                            <option value="15:00">
-                                03:00 PM
-                            </option>
-
-                            <option value="16:00">
-                                04:00 PM
-                            </option>
-
-                        </select>
-
-                    </div>
-
-
-
-                    <div class="campo">
-
-                        <label for="agente">
-                            Agente encargado
-                        </label>
-
-                        <select
-                            id="agente"
-                            required
-                        >
-
-                            <option value="">
-                                Seleccione un agente
-                            </option>
-
-                            <option value="Carlos López">
-                                Carlos López
-                            </option>
-
-                            <option value="Miguel García">
-                                Miguel García
-                            </option>
-
-                            <option value="José Martínez">
-                                José Martínez
-                            </option>
-
-                            <option value="Daniel Ramírez">
-                                Daniel Ramírez
-                            </option>
-
-                        </select>
-
-                    </div>
-
-
                 </div>
 
-            </section>
-
-
-
-            <!-- =============================================
-                 BOTONES
-                 ============================================= -->
-
-            <div class="botones-formulario">
-
-                <button
-                    type="submit"
-                    id="btnGuardar"
-                    class="btn-guardar"
-                >
-
-                    📅 Programar cita
-
-                </button>
-
-
-                <button
-                    type="button"
-                    id="btnLimpiar"
-                    class="btn-limpiar"
-                >
-
-                    Limpiar
-
-                </button>
+                <div class="contador">
+                    <strong id="contadorCitas">0</strong>
+                    <span>citas</span>
+                </div>
 
             </div>
 
 
-        </form>
-
-
-
-        <!-- =================================================
-             CITAS PROGRAMADAS
-             ================================================= -->
-
-        <section class="tarjeta">
-
-            <div class="titulo-citas">
-
-                <h2>
-                    📋 Citas programadas
-                </h2>
-
-                <span id="contadorCitas">
-                    0 citas
-                </span>
-
-            </div>
-
-
-            <div
-                id="listaCitas"
-                class="lista-citas"
-            >
+            <div id="listaCitas" class="lista-citas">
 
                 <div class="sin-citas">
+                    <i class="fa-regular fa-calendar-xmark"></i>
+
+                    <h3>No hay citas programadas</h3>
 
                     <p>
-                        📅 No hay citas programadas.
+                        Las citas que registre aparecerán aquí.
                     </p>
-
                 </div>
 
             </div>
 
         </section>
 
-
     </main>
 
 
+    <!-- =========================
+         FOOTER
+    ========================== -->
+    <footer class="footer">
 
-    <!-- =====================================================
-         PIE DE PÁGINA
-         ===================================================== -->
+        <p>
+            <i class="fa-solid fa-car"></i>
+            Gestión de Vehículos | Taller UMG
+        </p>
 
-    <footer>
-
-        <div class="contenedor">
-
-            <p>
-                © 2026 FlexiCar -
-                Mantenimiento y mecánica automotriz
-            </p>
-
-        </div>
+        <span>
+            Sistema académico de gestión de citas
+        </span>
 
     </footer>
 
 
-
-    <!-- =====================================================
-         JAVASCRIPT
-         ===================================================== -->
-
     <script src="vehiculo.js"></script>
 
 </body>
-
 </html>
