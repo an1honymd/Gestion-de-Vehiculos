@@ -1,13 +1,13 @@
-'use strict';
-
 /* =========================================================
    FLEXICAR - SISTEMA DE CITAS
    ========================================================= */
 
+'use strict';
+
 const formulario = document.getElementById('formularioCita');
-const btnLimpiar = document.getElementById('btnLimpiar');
 const listaCitas = document.getElementById('listaCitas');
 const contadorCitas = document.getElementById('contadorCitas');
+const btnLimpiar = document.getElementById('btnLimpiar');
 
 let citas = [];
 let indiceEditando = -1;
@@ -16,7 +16,7 @@ const STORAGE_CITAS = 'flexicarCitas';
 
 
 /* =========================================================
-   PRECIOS Y TIEMPOS DE LOS SERVICIOS
+   SERVICIOS
    ========================================================= */
 
 const servicios = {
@@ -50,13 +50,15 @@ const servicios = {
 
 
 /* =========================================================
-   INICIAR SISTEMA
+   INICIO
    ========================================================= */
 
 document.addEventListener('DOMContentLoaded', function () {
 
     cargarCitas();
+
     establecerFechaMinima();
+
     mostrarCitas();
 
 });
@@ -76,15 +78,10 @@ function cargarCitas() {
 
             citas = JSON.parse(datos);
 
-            if (!Array.isArray(citas)) {
-                citas = [];
-            }
-
         } catch (error) {
 
-            console.error('Error al cargar las citas:', error);
-
             citas = [];
+
         }
 
     } else {
@@ -114,67 +111,68 @@ function guardarCitas() {
    PROGRAMAR CITA
    ========================================================= */
 
-formulario.addEventListener('submit', function (event) {
+formulario.addEventListener('submit', function (evento) {
 
-    event.preventDefault();
+    evento.preventDefault();
+
+
+    const nombre =
+        document.getElementById('nombre').value.trim();
+
+    const telefono =
+        document.getElementById('telefono').value.trim();
+
+    const correo =
+        document.getElementById('correo').value.trim();
+
+
+    const marca =
+        document.getElementById('marca').value.trim();
+
+    const modelo =
+        document.getElementById('modelo').value.trim();
+
+    const anio =
+        document.getElementById('anio').value;
+
+    const placa =
+        document.getElementById('placa').value.trim();
+
+
+    const tipoServicio =
+        document.getElementById('tipoServicio').value;
+
+
+    const fecha =
+        document.getElementById('fecha').value;
+
+
+    const hora =
+        document.getElementById('hora').value;
+
+
+    const agente =
+        document.getElementById('agente').value;
 
 
     /* =====================================================
-       OBTENER SERVICIO
+       VALIDAR SERVICIO
        ===================================================== */
 
-    const servicioSeleccionado =
-        document.getElementById('tipoServicio').value;
+    if (!servicios[tipoServicio]) {
 
-    const informacionServicio =
-        servicios[servicioSeleccionado];
-
-
-    if (!informacionServicio) {
-
-        alert('Seleccione un tipo de servicio.');
+        alert('Seleccione un tipo de servicio válido.');
 
         return;
+
     }
 
 
-    /* =====================================================
-       CREAR CITA
-       ===================================================== */
+    const costo =
+        servicios[tipoServicio].costo;
 
-    const cita = {
-
-        nombre: document.getElementById('nombre').value.trim(),
-
-        telefono: document.getElementById('telefono').value.trim(),
-
-        correo: document.getElementById('correo').value.trim(),
-
-        marca: document.getElementById('marca').value.trim(),
-
-        modelo: document.getElementById('modelo').value.trim(),
-
-        anio: document.getElementById('anio').value,
-
-        placa: document.getElementById('placa').value
-            .trim()
-            .toUpperCase(),
-
-        tipoServicio: servicioSeleccionado,
-
-        costo: informacionServicio.costo,
-
-        tiempo: informacionServicio.tiempo,
-
-        fecha: document.getElementById('fecha').value,
-
-        hora: document.getElementById('hora').value,
-
-        agente: document.getElementById('agente').value,
-
-        estado: 'Programada'
-
-    };
+    const tiempo =
+        servicios[tipoServicio].tiempo;
 
 
     /* =====================================================
@@ -186,49 +184,87 @@ formulario.addEventListener('submit', function (event) {
     hoy.setHours(0, 0, 0, 0);
 
     const fechaSeleccionada =
-        new Date(cita.fecha + 'T00:00:00');
+        new Date(fecha + 'T00:00:00');
 
 
     if (fechaSeleccionada < hoy) {
 
         alert(
-            'No puedes seleccionar una fecha anterior a hoy.'
+            'No puede seleccionar una fecha anterior a hoy.'
         );
 
         return;
+
     }
 
 
     /* =====================================================
-       VERIFICAR CITA DUPLICADA
+       VALIDAR CITA DUPLICADA
        ===================================================== */
 
-    const duplicada = citas.some(function (item, index) {
+    const citaDuplicada = citas.some(
+        function (cita, indice) {
 
-        if (
-            indiceEditando !== -1 &&
-            index === indiceEditando
-        ) {
-            return false;
+            if (indice === indiceEditando) {
+
+                return false;
+
+            }
+
+            return (
+                cita.fecha === fecha &&
+                cita.hora === hora &&
+                cita.agente === agente
+            );
+
         }
-
-        return (
-            item.fecha === cita.fecha &&
-            item.hora === cita.hora &&
-            item.agente === cita.agente
-        );
-
-    });
+    );
 
 
-    if (duplicada) {
+    if (citaDuplicada) {
 
         alert(
-            'Ya existe una cita para ese agente, fecha y hora.'
+            'El agente seleccionado ya tiene una cita programada para esa fecha y hora.'
         );
 
         return;
+
     }
+
+
+    /* =====================================================
+       CREAR CITA
+       ===================================================== */
+
+    const nuevaCita = {
+
+        id: Date.now(),
+
+        nombre: nombre,
+        telefono: telefono,
+        correo: correo,
+
+        marca: marca,
+        modelo: modelo,
+        anio: anio,
+        placa: placa,
+
+        tipoServicio: tipoServicio,
+
+        costo: costo,
+        tiempo: tiempo,
+
+        fecha: fecha,
+        hora: hora,
+
+        agente: agente,
+
+        estado: 'Programada',
+
+        notificacionAgente: false,
+        notificacionCliente: false
+
+    };
 
 
     /* =====================================================
@@ -237,46 +273,89 @@ formulario.addEventListener('submit', function (event) {
 
     if (indiceEditando === -1) {
 
-        citas.push(cita);
+        citas.push(nuevaCita);
+
+        guardarCitas();
+
+        mostrarCitas();
+
+        formulario.reset();
+
+        establecerFechaMinima();
+
 
         alert(
-            '¡Cita programada correctamente!'
+            '✅ Cita programada correctamente.\n\n' +
+
+            'Agente: ' + agente + '\n' +
+
+            'Cliente: ' + nombre + '\n' +
+
+            'Servicio: ' + tipoServicio + '\n' +
+
+            'Costo estimado: Q' +
+            costo.toFixed(2) + '\n' +
+
+            'Tiempo estimado: ' +
+            tiempo
         );
 
-    }
+
+        /* =================================================
+           ABRIR WHATSAPP DEL AGENTE
+           ================================================= */
+
+        notificarAgenteWhatsApp(
+            nuevaCita
+        );
 
 
-    /* =====================================================
-       ACTUALIZAR CITA
-       ===================================================== */
+    } else {
 
-    else {
+        /* =================================================
+           ACTUALIZAR CITA
+           ================================================= */
 
-        citas[indiceEditando] = cita;
+        nuevaCita.id =
+            citas[indiceEditando].id;
+
+        nuevaCita.estado =
+            citas[indiceEditando].estado;
+
+        nuevaCita.notificacionAgente =
+            citas[indiceEditando].notificacionAgente;
+
+        nuevaCita.notificacionCliente =
+            citas[indiceEditando].notificacionCliente;
+
+
+        citas[indiceEditando] =
+            nuevaCita;
+
+
+        guardarCitas();
+
+        mostrarCitas();
+
+        formulario.reset();
+
+        establecerFechaMinima();
+
 
         indiceEditando = -1;
 
-        document.getElementById('btnGuardar').innerHTML =
+
+        document.getElementById(
+            'btnGuardar'
+        ).innerHTML =
             '📅 Programar cita';
 
+
         alert(
-            '¡Cita actualizada correctamente!'
+            '✅ Cita actualizada correctamente.'
         );
 
     }
-
-
-    /* =====================================================
-       GUARDAR Y MOSTRAR
-       ===================================================== */
-
-    guardarCitas();
-
-    mostrarCitas();
-
-    formulario.reset();
-
-    establecerFechaMinima();
 
 });
 
@@ -287,28 +366,21 @@ formulario.addEventListener('submit', function (event) {
 
 function mostrarCitas() {
 
-    listaCitas.innerHTML = '';
+    if (!listaCitas) {
 
-
-    /* =====================================================
-       CONTADOR
-       ===================================================== */
-
-    if (citas.length === 1) {
-
-        contadorCitas.textContent = '1 cita';
-
-    } else {
-
-        contadorCitas.textContent =
-            `${citas.length} citas`;
+        return;
 
     }
 
 
-    /* =====================================================
-       SIN CITAS
-       ===================================================== */
+    contadorCitas.textContent =
+        citas.length +
+        (
+            citas.length === 1
+                ? ' cita'
+                : ' citas'
+        );
+
 
     if (citas.length === 0) {
 
@@ -316,10 +388,8 @@ function mostrarCitas() {
 
             <div class="sin-citas">
 
-                <h3>No hay citas programadas</h3>
-
                 <p>
-                    Las citas que registres aparecerán aquí.
+                    📅 No hay citas programadas.
                 </p>
 
             </div>
@@ -327,97 +397,94 @@ function mostrarCitas() {
         `;
 
         return;
+
     }
 
 
-    /* =====================================================
-       MOSTRAR CADA CITA
-       ===================================================== */
+    listaCitas.innerHTML = '';
 
-    citas.forEach(function (cita, index) {
 
-        const elemento =
+    citas.forEach(function (cita, indice) {
+
+        const tarjeta =
             document.createElement('div');
 
-        elemento.className = 'cita';
+
+        tarjeta.className = 'cita';
 
 
-        elemento.innerHTML = `
+        let estadoClase = '';
 
-            <div class="cita-cabecera">
 
-                <h3>
-                    🚗 ${escapeHTML(cita.marca)}
-                    ${escapeHTML(cita.modelo)}
-                </h3>
+        if (cita.estado === 'Finalizada') {
 
-                <span class="estado">
-                    ${escapeHTML(cita.estado)}
-                </span>
+            estadoClase = 'finalizada';
 
+        }
+
+
+        tarjeta.innerHTML = `
+
+            <div class="estado ${estadoClase}">
+                ${escapeHTML(cita.estado)}
             </div>
+
+
+            <h3>
+                🚗 ${escapeHTML(cita.marca)}
+                ${escapeHTML(cita.modelo)}
+            </h3>
 
 
             <div class="informacion-cita">
 
                 <p>
-                    <strong>👤 Conductor:</strong>
+                    👤 <strong>Cliente:</strong>
                     ${escapeHTML(cita.nombre)}
                 </p>
 
                 <p>
-                    <strong>📞 Teléfono:</strong>
+                    📞 <strong>Teléfono:</strong>
                     ${escapeHTML(cita.telefono)}
                 </p>
 
                 <p>
-                    <strong>📧 Correo:</strong>
+                    📧 <strong>Correo:</strong>
                     ${escapeHTML(cita.correo)}
                 </p>
 
                 <p>
-                    <strong>🚘 Vehículo:</strong>
-                    ${escapeHTML(cita.marca)}
-                    ${escapeHTML(cita.modelo)}
-                </p>
-
-                <p>
-                    <strong>📅 Año:</strong>
-                    ${escapeHTML(cita.anio)}
-                </p>
-
-                <p>
-                    <strong>🔖 Placa:</strong>
+                    🚘 <strong>Placa:</strong>
                     ${escapeHTML(cita.placa)}
                 </p>
 
                 <p>
-                    <strong>🔧 Tipo de servicio:</strong>
+                    🔧 <strong>Servicio:</strong>
                     ${escapeHTML(cita.tipoServicio)}
                 </p>
 
                 <p>
-                    <strong>💰 Costo estimado:</strong>
+                    💰 <strong>Costo estimado:</strong>
                     Q${Number(cita.costo).toFixed(2)}
                 </p>
 
                 <p>
-                    <strong>⏱️ Tiempo estimado:</strong>
+                    ⏱️ <strong>Tiempo estimado:</strong>
                     ${escapeHTML(cita.tiempo)}
                 </p>
 
                 <p>
-                    <strong>📆 Fecha:</strong>
+                    📅 <strong>Fecha:</strong>
                     ${formatearFecha(cita.fecha)}
                 </p>
 
                 <p>
-                    <strong>⏰ Hora:</strong>
+                    🕐 <strong>Hora:</strong>
                     ${formatearHora(cita.hora)}
                 </p>
 
                 <p>
-                    <strong>👨‍🔧 Agente:</strong>
+                    👨‍🔧 <strong>Agente:</strong>
                     ${escapeHTML(cita.agente)}
                 </p>
 
@@ -426,33 +493,303 @@ function mostrarCitas() {
 
             <div class="acciones">
 
-                <button
-                    type="button"
-                    class="btn-editar"
-                    onclick="editarCita(${index})">
+                ${
+                    cita.estado !== 'Finalizada'
+                    ?
 
-                    ✏️ Editar
+                    `
 
-                </button>
+                    <button
+                        class="btn-editar"
+                        onclick="editarCita(${indice})">
+
+                        ✏️ Editar
+
+                    </button>
 
 
-                <button
-                    type="button"
-                    class="btn-eliminar"
-                    onclick="eliminarCita(${index})">
+                    <button
+                        class="btn-eliminar"
+                        onclick="eliminarCita(${indice})">
 
-                    🗑️ Eliminar
+                        🗑️ Eliminar
 
-                </button>
+                    </button>
+
+
+                    <button
+                        class="btn-finalizar"
+                        onclick="finalizarCita(${indice})">
+
+                        ✅ Finalizar mantenimiento
+
+                    </button>
+
+
+                    <button
+                        class="btn-whatsapp"
+                        onclick="notificarAgenteWhatsApp(citas[${indice}])">
+
+                        📱 Notificar agente
+
+                    </button>
+
+                    `
+
+                    :
+
+                    `
+
+                    <button
+                        class="btn-eliminar"
+                        onclick="eliminarCita(${indice})">
+
+                        🗑️ Eliminar
+
+                    </button>
+
+
+                    <button
+                        class="btn-whatsapp"
+                        onclick="notificarClienteWhatsApp(citas[${indice}])">
+
+                        📱 Notificar cliente
+
+                    </button>
+
+                    `
+
+                }
 
             </div>
 
         `;
 
 
-        listaCitas.appendChild(elemento);
+        listaCitas.appendChild(tarjeta);
 
     });
+
+}
+
+
+/* =========================================================
+   NOTIFICAR AGENTE POR WHATSAPP
+   ========================================================= */
+
+function notificarAgenteWhatsApp(cita) {
+
+    if (!cita) {
+
+        return;
+
+    }
+
+
+    /*
+       IMPORTANTE:
+
+       Coloca aquí el número real de WhatsApp
+       del agente si quieres enviarle el mensaje.
+
+       Ejemplo Guatemala:
+       50255555555
+    */
+
+    const numerosAgentes = {
+
+        "Carlos López": "50233434989",
+
+        "Miguel García": "50233434989",
+
+        "José Martínez": "50233434989",
+
+        "Daniel Ramírez": "50233434989"
+
+    };
+
+
+    const numeroAgente =
+        numerosAgentes[cita.agente];
+
+
+    if (!numeroAgente) {
+
+        alert(
+            'No hay un número de WhatsApp configurado para este agente.'
+        );
+
+        return;
+
+    }
+
+
+    const mensaje =
+
+        '🚗 *FLEXICAR - NUEVA CITA*%0A%0A' +
+
+        'Hola ' +
+        cita.agente +
+        ', se ha programado una nueva cita.%0A%0A' +
+
+        '👤 Cliente: ' +
+        cita.nombre +
+        '%0A' +
+
+        '📞 Teléfono: ' +
+        cita.telefono +
+        '%0A' +
+
+        '🚗 Vehículo: ' +
+        cita.marca +
+        ' ' +
+        cita.modelo +
+        '%0A' +
+
+        '🔢 Placa: ' +
+        cita.placa +
+        '%0A' +
+
+        '🔧 Servicio: ' +
+        cita.tipoServicio +
+        '%0A' +
+
+        '💰 Costo estimado: Q' +
+        Number(cita.costo).toFixed(2) +
+        '%0A' +
+
+        '⏱️ Tiempo estimado: ' +
+        cita.tiempo +
+        '%0A' +
+
+        '📅 Fecha: ' +
+        formatearFecha(cita.fecha) +
+        '%0A' +
+
+        '🕐 Hora: ' +
+        formatearHora(cita.hora);
+
+
+    const url =
+        'https://wa.me/' +
+        numeroAgente +
+        '?text=' +
+        mensaje;
+
+
+    window.open(
+        url,
+        '_blank'
+    );
+
+
+    cita.notificacionAgente = true;
+
+    guardarCitas();
+
+}
+
+
+/* =========================================================
+   NOTIFICAR CLIENTE POR WHATSAPP
+   ========================================================= */
+
+function notificarClienteWhatsApp(cita) {
+
+    if (!cita) {
+
+        return;
+
+    }
+
+
+    let telefono =
+        cita.telefono;
+
+
+    /*
+       Quitar espacios, guiones y otros caracteres.
+    */
+
+    telefono =
+        telefono.replace(
+            /[^0-9]/g,
+            ''
+        );
+
+
+    /*
+       Si el número tiene 8 dígitos,
+       se agrega el código de Guatemala 502.
+    */
+
+    if (telefono.length === 8) {
+
+        telefono =
+            '502' +
+            telefono;
+
+    }
+
+
+    if (telefono.length < 10) {
+
+        alert(
+            'El número de teléfono del cliente no es válido para WhatsApp.'
+        );
+
+        return;
+
+    }
+
+
+    const mensaje =
+
+        '🚗 *FLEXICAR*%0A%0A' +
+
+        'Hola ' +
+        cita.nombre +
+        ', le informamos que el mantenimiento de su vehículo ha finalizado.%0A%0A' +
+
+        '🚗 Vehículo: ' +
+        cita.marca +
+        ' ' +
+        cita.modelo +
+        '%0A' +
+
+        '🔢 Placa: ' +
+        cita.placa +
+        '%0A' +
+
+        '🔧 Servicio realizado: ' +
+        cita.tipoServicio +
+        '%0A' +
+
+        '💰 Costo estimado: Q' +
+        Number(cita.costo).toFixed(2) +
+        '%0A%0A' +
+
+        '✅ Su vehículo está listo para ser recogido.%0A%0A' +
+
+        'Gracias por confiar en *FlexiCar*.';
+
+
+    const url =
+        'https://wa.me/' +
+        telefono +
+        '?text=' +
+        mensaje;
+
+
+    window.open(
+        url,
+        '_blank'
+    );
+
+
+    cita.notificacionCliente = true;
+
+    guardarCitas();
 
 }
 
@@ -461,12 +798,15 @@ function mostrarCitas() {
    EDITAR CITA
    ========================================================= */
 
-function editarCita(index) {
+function editarCita(indice) {
 
-    const cita = citas[index];
+    const cita = citas[indice];
+
 
     if (!cita) {
+
         return;
+
     }
 
 
@@ -504,15 +844,21 @@ function editarCita(index) {
         cita.agente;
 
 
-    indiceEditando = index;
+    indiceEditando = indice;
 
 
-    document.getElementById('btnGuardar').innerHTML =
+    document.getElementById(
+        'btnGuardar'
+    ).innerHTML =
         '💾 Actualizar cita';
 
 
-    formulario.scrollIntoView({
+    window.scrollTo({
+
+        top: 0,
+
         behavior: 'smooth'
+
     });
 
 }
@@ -522,45 +868,183 @@ function editarCita(index) {
    ELIMINAR CITA
    ========================================================= */
 
-function eliminarCita(index) {
+function eliminarCita(indice) {
 
-    const cita = citas[index];
+    const cita = citas[indice];
+
 
     if (!cita) {
+
         return;
+
     }
 
 
-    const confirmar = confirm(
-        `¿Deseas eliminar la cita de ${cita.nombre}?`
-    );
+    const confirmar =
+        confirm(
+            '¿Está seguro de eliminar la cita de ' +
+            cita.nombre +
+            '?'
+        );
 
 
     if (!confirmar) {
+
         return;
+
     }
 
 
-    citas.splice(index, 1);
+    citas.splice(
+        indice,
+        1
+    );
+
 
     guardarCitas();
 
     mostrarCitas();
 
 
-    if (indiceEditando === index) {
+    alert(
+        '🗑️ Cita eliminada correctamente.'
+    );
 
-        indiceEditando = -1;
+}
 
-        formulario.reset();
 
-        document.getElementById('btnGuardar').innerHTML =
-            '📅 Programar cita';
+/* =========================================================
+   FINALIZAR MANTENIMIENTO
+   ========================================================= */
 
-        establecerFechaMinima();
+function finalizarCita(indice) {
+
+    const cita = citas[indice];
+
+
+    if (!cita) {
+
+        return;
 
     }
 
+
+    const confirmar =
+        confirm(
+
+            '¿Desea marcar como FINALIZADO el mantenimiento de ' +
+            cita.nombre +
+            '?'
+
+        );
+
+
+    if (!confirmar) {
+
+        return;
+
+    }
+
+
+    cita.estado =
+        'Finalizada';
+
+
+    cita.notificacionCliente =
+        false;
+
+
+    guardarCitas();
+
+    mostrarCitas();
+
+
+    alert(
+
+        '✅ Mantenimiento finalizado.\n\n' +
+
+        'Ahora puede presionar el botón:\n' +
+
+        '📱 Notificar cliente\n\n' +
+
+        'para enviarle el mensaje por WhatsApp.'
+
+    );
+
+}
+
+
+/* =========================================================
+   NOTIFICACIÓN INTERNA
+   ========================================================= */
+
+function mostrarNotificacion(
+    titulo,
+    mensaje
+) {
+
+    const notificacion =
+        document.createElement('div');
+
+
+    notificacion.className =
+        'notificacion-flexicar';
+
+
+    notificacion.innerHTML = `
+
+        <strong>
+            ${escapeHTML(titulo)}
+        </strong>
+
+        <p>
+            ${escapeHTML(mensaje)}
+        </p>
+
+        <button>
+            ✕
+        </button>
+
+    `;
+
+
+    document.body.appendChild(
+        notificacion
+    );
+
+
+    const boton =
+        notificacion.querySelector(
+            'button'
+        );
+
+
+    boton.addEventListener(
+        'click',
+        function () {
+
+            notificacion.remove();
+
+        }
+    );
+
+
+    setTimeout(
+        function () {
+
+            if (
+                document.body.contains(
+                    notificacion
+                )
+            ) {
+
+                notificacion.remove();
+
+            }
+
+        },
+        7000
+    );
 
 }
 
@@ -569,18 +1053,29 @@ function eliminarCita(index) {
    BOTÓN LIMPIAR
    ========================================================= */
 
-btnLimpiar.addEventListener('click', function () {
+if (btnLimpiar) {
 
-    formulario.reset();
+    btnLimpiar.addEventListener(
+        'click',
+        function () {
 
-    indiceEditando = -1;
+            formulario.reset();
 
-    document.getElementById('btnGuardar').innerHTML =
-        '📅 Programar cita';
+            indiceEditando = -1;
 
-    establecerFechaMinima();
 
-});
+            document.getElementById(
+                'btnGuardar'
+            ).innerHTML =
+                '📅 Programar cita';
+
+
+            establecerFechaMinima();
+
+        }
+    );
+
+}
 
 
 /* =========================================================
@@ -589,19 +1084,46 @@ btnLimpiar.addEventListener('click', function () {
 
 function establecerFechaMinima() {
 
+    const campoFecha =
+        document.getElementById(
+            'fecha'
+        );
+
+
+    if (!campoFecha) {
+
+        return;
+
+    }
+
+
     const hoy = new Date();
 
-    const anio = hoy.getFullYear();
+
+    const año =
+        hoy.getFullYear();
+
 
     const mes =
-        String(hoy.getMonth() + 1).padStart(2, '0');
+        String(
+            hoy.getMonth() + 1
+        ).padStart(
+            2,
+            '0'
+        );
+
 
     const dia =
-        String(hoy.getDate()).padStart(2, '0');
+        String(
+            hoy.getDate()
+        ).padStart(
+            2,
+            '0'
+        );
 
 
-    document.getElementById('fecha').min =
-        `${anio}-${mes}-${dia}`;
+    campoFecha.min =
+        `${año}-${mes}-${dia}`;
 
 }
 
@@ -613,16 +1135,32 @@ function establecerFechaMinima() {
 function formatearFecha(fecha) {
 
     if (!fecha) {
+
         return '';
+
     }
 
-    const partes = fecha.split('-');
+
+    const partes =
+        fecha.split('-');
+
 
     if (partes.length !== 3) {
+
         return fecha;
+
     }
 
-    return `${partes[2]}/${partes[1]}/${partes[0]}`;
+
+    return (
+
+        partes[2] +
+        '/' +
+        partes[1] +
+        '/' +
+        partes[0]
+
+    );
 
 }
 
@@ -634,41 +1172,58 @@ function formatearFecha(fecha) {
 function formatearHora(hora) {
 
     if (!hora) {
+
         return '';
-    }
-
-    const partes = hora.split(':');
-
-    let horas = parseInt(partes[0], 10);
-
-    const minutos = partes[1];
-
-    let periodo = 'AM';
-
-
-    if (horas >= 12) {
-
-        periodo = 'PM';
-
-        if (horas > 12) {
-            horas -= 12;
-        }
 
     }
+
+
+    const partes =
+        hora.split(':');
+
+
+    let horas =
+        parseInt(
+            partes[0]
+        );
+
+
+    const minutos =
+        partes[1];
+
+
+    const periodo =
+        horas >= 12
+            ? 'PM'
+            : 'AM';
 
 
     if (horas === 0) {
+
         horas = 12;
+
+    } else if (horas > 12) {
+
+        horas -= 12;
+
     }
 
 
-    return `${horas}:${minutos} ${periodo}`;
+    return (
+
+        horas +
+        ':' +
+        minutos +
+        ' ' +
+        periodo
+
+    );
 
 }
 
 
 /* =========================================================
-   SEGURIDAD
+   SEGURIDAD HTML
    ========================================================= */
 
 function escapeHTML(texto) {
@@ -677,20 +1232,37 @@ function escapeHTML(texto) {
         texto === null ||
         texto === undefined
     ) {
+
         return '';
+
     }
 
 
     return String(texto)
 
-        .replace(/&/g, '&amp;')
+        .replace(
+            /&/g,
+            '&amp;'
+        )
 
-        .replace(/</g, '&lt;')
+        .replace(
+            /</g,
+            '&lt;'
+        )
 
-        .replace(/>/g, '&gt;')
+        .replace(
+            />/g,
+            '&gt;'
+        )
 
-        .replace(/"/g, '&quot;')
+        .replace(
+            /"/g,
+            '&quot;'
+        )
 
-        .replace(/'/g, '&#039;');
+        .replace(
+            /'/g,
+            '&#039;'
+        );
 
 }
